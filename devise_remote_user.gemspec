@@ -8,16 +8,15 @@ Gem::Specification.new do |s|
   s.version     = DeviseRemoteUser::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["David Chandek-Stark"]
-  s.email       = ["david.chandek.stark@duke.edu"]
+  s.email       = ["lib-drs@duke.edu"]
   s.homepage    = "http://github.com/duke-libraries/devise-remote-user"
   s.summary     = "A devise plugin for remote user authentication."
   s.description = "A devise plugin for remote user authentication."
   s.license     = "BSD"
 
-  s.required_ruby_version = '>= 1.9.3'
   s.files = `git ls-files`.split("\n")
   s.extra_rdoc_files = ["LICENSE", "README.md"]
   s.require_paths = ["lib"]
+  s.add_dependency "rails", ">= 3.2"
   s.add_dependency "devise"
-
 end
