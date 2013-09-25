@@ -20,7 +20,7 @@ bundle install
 Sorry, there are no generators yet, so ...
 
 - Add `:remote_user_authenticatable` symbol to `devise` statement in User model.
-- Add `require 'devise-remote-user' to devise initializer at `config/initializers/devise.rb`
+- Add `require 'devise-remote-user'` to devise initializer at `config/initializers/devise.rb`
 - Add `before_filter :authenticate_user!` to ApplicationController, if not already present.  This ensures that remote user is logged in locally (via database)
 
 Configuration options in `config/intializers/devise.rb`:
