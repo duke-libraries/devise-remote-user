@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ["David Chandek-Stark"]
   s.email       = ["lib-drs@duke.edu"]
   s.homepage    = "http://github.com/duke-libraries/devise-remote-user"
-  s.summary     = "A devise plugin for remote user authentication."
-  s.description = "A devise plugin for remote user authentication."
+  s.summary     = "A devise extension for remote user authentication."
+  s.description = "A devise extension for remote user authentication."
   s.license     = "BSD"
 
   s.files = `git ls-files`.split("\n")

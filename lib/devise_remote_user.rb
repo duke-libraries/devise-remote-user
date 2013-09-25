@@ -11,13 +11,18 @@ module Devise
   mattr_accessor :remote_user_env_key
   @@remote_user_env_key = 'REMOTE_USER'
   
-  # request.env key for remote user email address, required for auto-creation
-  mattr_accessor :remote_user_email_env_key
-  @@remote_user_email_env_key = 'mail'
-
   # Enable user auto-creation for remote user
   mattr_accessor :remote_user_autocreate
   @@remote_user_autocreate = false
+
+  # User attribute used for lookup of remote user
+  # Defaults to Devise.authentication_keys.first
+  mattr_accessor :remote_user_auth_key
+  @@remote_user_auth_key = nil
+
+  # Map of User model attributes to request.env keys for updating a local user when auto-creation is enabled.
+  mattr_accessor :remote_user_attribute_map
+  @@remote_user_attribute_map = {}
 end
 
 Devise.add_module(:remote_user_authenticatable,
