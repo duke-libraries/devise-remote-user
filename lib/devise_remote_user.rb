@@ -10,12 +10,10 @@ module DeviseRemoteUser
   #
   # To implement auto-updating behavior, add to config/initializers/devise.rb
   #
-  #    config.warden do |manager|
-  #      manager.after_authentication do |user, auth, opts|
+  #      Warden::Manager.after_authentication do |user, auth, opts|
   #        user_manager = DeviseRemoteUser::UserManager.new(auth.env)
   #        user_manager.update_user(user)
   #      end
-  #    end
   #
   class UserManager
 
