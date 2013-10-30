@@ -1,8 +1,64 @@
 require 'devise'
 
 module DeviseRemoteUser
-  class Engine < Rails::Engine
+
+  class Engine < Rails::Engine; end
+
+  #
+  # The UserManager class is responsible for connecting the appliation's User 
+  # class with remote user information in the request environment.
+  #
+  # To implement auto-updating behavior, add to config/initializers/devise.rb
+  #
+  #    config.warden do |manager|
+  #      manager.after_authentication do |user, auth, opts|
+  #        user_manager = DeviseRemoteUser::UserManager.new(auth.env)
+  #        user_manager.update_user(user)
+  #      end
+  #    end
+  #
+  class UserManager
+
+    attr_reader :env
+    
+    def initialize(env)
+      @env = env
+    end
+
+    def remote_user_attributes
+      Devise.remote_user_attribute_map.inject({}) { |h, (k, v)| h[k] = env[v] if env.has_key?(v); h }
+    end
+
+    def find_user
+      User.where(user_criterion).first
+    end
+
+    def create_user
+      random_password = SecureRandom.hex(16)
+      attrs = user_criterion.merge({password: random_password, password_confirmation: random_password})
+      user = User.create(attrs)
+      update_user(user)
+      user
+    end
+
+    def update_user(user)
+      user.update_attributes(remote_user_attributes)
+    end
+
+    def user_criterion
+      {auth_key => remote_user_id}
+    end
+
+    def remote_user_id
+      env[Devise.remote_user_env_key]
+    end
+
+    def auth_key
+      Devise.remote_user_auth_key || Devise.authentication_keys.first
+    end
+    
   end
+
 end
 
 module Devise
