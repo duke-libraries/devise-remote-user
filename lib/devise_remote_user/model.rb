@@ -1,4 +1,5 @@
 require 'devise_remote_user/strategy'
+require 'devise_remote_user/manager'
 
 module Devise::Models
   module RemoteUserAuthenticatable
@@ -7,12 +8,8 @@ module Devise::Models
     module ClassMethods
 
       def find_for_remote_user_authentication(env)
-        user_manager = DeviseRemoteUser::UserManager.new(env)
-        user = user_manager.find_user
-        if !user && Devise.remote_user_autocreate
-          user = user_manager.create_user
-        end
-        user
+        manager = DeviseRemoteUser::Manager.new(env)
+        manager.find_or_create_user
       end
 
     end

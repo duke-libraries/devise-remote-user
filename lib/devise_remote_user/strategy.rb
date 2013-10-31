@@ -6,7 +6,7 @@ module Devise
     class RemoteUserAuthenticatable < Authenticatable
 
       def valid?
-        env[Devise.remote_user_env_key].present?
+        env[DeviseRemoteUser.env_key].present?
       end
 
       def authenticate!
