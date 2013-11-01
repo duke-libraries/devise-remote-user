@@ -1,8 +1,7 @@
 require 'devise'
+require 'devise_remote_user/engine'
 
 module DeviseRemoteUser
-  
-  class Engine < Rails::Engine; end
 
   # request.env key for remote user name
   # Set to 'HTTP_REMOTE_USER' in config/initializers/devise.rb if behind reverse proxy
