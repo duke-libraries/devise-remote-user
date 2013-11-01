@@ -40,11 +40,8 @@ DeviseRemoteUser.configure do |config|
   config.auto_update = true
   config.attribute_map = {email: 'mail'}
 end
-
-# Uses Warden after_authentication callback to implement auto_update feature
-DeviseRemoteUser.add_warden_callbacks
 ```
 
 ## Tests
 
-Sorry, they haven't been added yet because this code was refactored from en existing Rails app.
+`rake spec` runs the test suite.

@@ -29,15 +29,6 @@ module DeviseRemoteUser
     yield self
   end
 
-  def self.add_warden_callbacks
-    if auto_update
-      Warden::Manager.after_authentication do |user, auth, opts|
-        manager = DeviseRemoteUser::Manager.new(auth.env)
-        manager.update_user(user)
-      end
-    end
-  end
-
 end
 
 Devise.add_module(:remote_user_authenticatable,

@@ -17,6 +17,7 @@ module DeviseRemoteUser
       if !user && DeviseRemoteUser.auto_create
         user = create_user
       end
+      update_user(user) if user && DeviseRemoteUser.auto_update
       user
     end
 
@@ -27,9 +28,7 @@ module DeviseRemoteUser
     def create_user
       random_password = SecureRandom.hex(16)
       attrs = user_criterion.merge({password: random_password, password_confirmation: random_password})
-      user = User.create(attrs)
-      update_user(user)
-      user
+      User.create(attrs)
     end
 
     def update_user(user)
