@@ -19,7 +19,7 @@ bundle install
 
 Sorry, there are no generators yet, so ...
 
-- Add `:remote_user_authenticatable` symbol to `devise` statement in User model.
+- Add `:remote_user_authenticatable` symbol to `devise` statement in User model, before other authentication strategies (e.g., `:database_authenticatable`).
 - Add `before_filter :authenticate_user!` to ApplicationController, if not already present.  This ensures that remote user is logged in locally (via database)
 
 Configuration options:
@@ -29,7 +29,7 @@ Configuration options:
 - `auto_create` - Boolean (default: `false`). Whether to auto-create a local user from the remote user attributes.  Note: Also requires adding the Warden callbacks as shown below.
 - `auto_update` - Boolean (default: `false`). Whether to auto-update authenticated user attributes from remote user attributes.
 
-Set options in `config/intializers/devise.rb`:
+Set options in a Rails initializer (e.g., `config/intializers/devise.rb`):
 
 ```ruby
 require 'devise-remote-user'
