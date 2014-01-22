@@ -32,7 +32,7 @@ Configuration options:
 Set options in a Rails initializer (e.g., `config/intializers/devise.rb`):
 
 ```ruby
-require 'devise-remote-user'
+require 'devise_remote_user'
 
 DeviseRemoteUser.configure do |config|
   config.env_key = 'REMOTE_USER'
