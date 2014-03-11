@@ -1,5 +1,6 @@
 require 'devise'
 require 'devise_remote_user/engine'
+require 'devise_remote_user/controller_behavior'
 
 module DeviseRemoteUser
 
@@ -24,6 +25,12 @@ module DeviseRemoteUser
   # Map of User model attributes to request.env keys for updating a local user when auto-creation is enabled.
   mattr_accessor :attribute_map
   @@attribute_map = {}
+
+  # Settings for redirecting to the remote user logout URL
+  # Enable by including DeviseRemoteUser::Controllers::Helpers in ApplicationController
+  # (it overrides Devise's after_sign_out_path_for method).
+  mattr_accessor :logout_url
+  @@logout_url = '/'
 
   def self.configure
     yield self

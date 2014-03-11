@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   before_filter :authenticate_user!
 
+  include DeviseRemoteUser::ControllerBehavior
+
   def index
     render text: "You have reached your destination!"
   end
