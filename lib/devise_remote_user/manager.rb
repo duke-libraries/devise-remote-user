@@ -46,7 +46,7 @@ module DeviseRemoteUser
     end
 
     def remote_user_id
-      env[DeviseRemoteUser.env_key]
+      DeviseRemoteUser.remote_user_id(env)
     end
 
     def auth_key
