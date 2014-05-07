@@ -9,7 +9,7 @@ module DeviseRemoteUser
     private 
 
     def remote_user_authenticated?
-      request.env[DeviseRemoteUser.env_key].present?
+      DeviseRemoteUser.remote_user_id(request.env).present?
     end
 
   end

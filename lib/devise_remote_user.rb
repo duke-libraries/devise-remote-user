@@ -35,6 +35,10 @@ module DeviseRemoteUser
   def self.configure
     yield self
   end
+  
+  def self.remote_user_id env
+    env[env_key]
+  end
 
 end
 
@@ -42,4 +46,3 @@ Devise.add_module(:remote_user_authenticatable,
                   :strategy => true,
                   :controller => :sessions,
                   :model => 'devise_remote_user/model')
-
