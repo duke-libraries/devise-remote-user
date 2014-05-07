@@ -37,7 +37,12 @@ module DeviseRemoteUser
   end
   
   def self.remote_user_id env
-    env[env_key]
+    case env_key
+    when Proc
+      env_key.call(env)
+    else
+      env[env_key]
+    end
   end
 
 end
