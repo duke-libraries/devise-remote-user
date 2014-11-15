@@ -1,5 +1,8 @@
 ENV['RAILS_ENV'] ||= 'test'
 
+require "coveralls"
+Coveralls.wear!("rails")
+
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
