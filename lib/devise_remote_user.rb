@@ -32,6 +32,10 @@ module DeviseRemoteUser
   mattr_accessor :logout_url
   @@logout_url = '/'
 
+  # make User model configurable i.e. for usage in rails engines
+  mattr_accessor :user_model
+  @@user_model = 'User'
+
   def self.configure
     yield self
   end
@@ -43,6 +47,10 @@ module DeviseRemoteUser
     else
       env[env_key]
     end
+  end
+
+  def self.user_model
+    @@user_model.constantize
   end
 
 end
