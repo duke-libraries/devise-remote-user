@@ -22,13 +22,13 @@ module DeviseRemoteUser
     end
 
     def find_user
-      User.where(user_criterion).first
+      DeviseRemoteUser.user_model.where(user_criterion).first
     end
 
     def create_user
       random_password = SecureRandom.hex(16)
       attrs = user_criterion.merge({password: random_password, password_confirmation: random_password})
-      User.create(attrs)
+      DeviseRemoteUser.user_model.create(attrs)
     end
 
     def update_user(user)
