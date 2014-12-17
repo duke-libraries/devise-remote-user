@@ -1,14 +1,15 @@
 module DeviseRemoteUser
 
   #
-  # The Manager class is responsible for connecting the appliation's User 
+  # The Manager class is responsible for connecting the appliation's User
   # class with remote user information in the request environment.
   #
   class Manager
 
-    attr_reader :env
-    
-    def initialize(env)
+    attr_reader :klass, :env
+
+    def initialize(klass, env)
+      @klass = klass
       @env = env
     end
 
@@ -22,13 +23,13 @@ module DeviseRemoteUser
     end
 
     def find_user
-      User.where(user_criterion).first
+      klass.where(user_criterion).first
     end
 
     def create_user
       random_password = SecureRandom.hex(16)
       attrs = user_criterion.merge({password: random_password, password_confirmation: random_password})
-      User.create(attrs)
+      klass.create(attrs)
     end
 
     def update_user(user)
@@ -36,7 +37,7 @@ module DeviseRemoteUser
     end
 
     protected
-    
+
     def remote_user_attributes
       DeviseRemoteUser.attribute_map.inject({}) { |h, (k, v)| h[k] = env[v] if env.has_key?(v); h }
     end
@@ -52,7 +53,7 @@ module DeviseRemoteUser
     def auth_key
       DeviseRemoteUser.auth_key || Devise.authentication_keys.first
     end
-    
+
   end
 
 end
