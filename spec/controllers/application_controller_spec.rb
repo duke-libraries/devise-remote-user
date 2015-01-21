@@ -12,49 +12,69 @@ describe ApplicationController do
     end
   end
 
-  after { User.destroy_all }
-
   describe "remote user authentication" do
-
-    describe "when remote user exists" do
-      let(:user) { FactoryGirl.create(:user) }
-      before { controller.remote_user_name = user.email }
-      it "should login the remote user" do
-        get :index
-        expect(controller.user_signed_in?).to be_true
-        expect(controller.current_user).to eq(user)
-      end
-    end
 
     describe "when remote user is not present" do
       before { controller.remote_user_name = nil }
-      it "should do nothing" do
-        get :index
-        expect(controller.user_signed_in?).to be_false
+      describe "and login_url is configured" do
+        before { allow(DeviseRemoteUser).to receive(:login_url) { login_url } }
+        describe "with a proc" do
+          let(:login_url) { Proc.new { |env| "http://example.com/login?return_to=#{env['REQUEST_URI']}" } }
+          before do
+            request.env["REQUEST_URI"] = "/"            
+          end
+          it "should redirect to the result of the proc" do
+            expect(get :index).to redirect_to("http://example.com/login?return_to=/")
+          end
+        end
+        describe "as a string" do
+          let(:login_url) { "http://example.com/login" }
+          it "should redirect to the login_url" do
+            expect(get :index).to redirect_to(login_url)
+          end
+        end
+      end
+      describe "and login_url is not configured" do
+        it "should do nothing" do
+          get :index
+          expect(controller.user_signed_in?).to be_false
+        end
       end
     end
 
-    describe "when remote user does not exist" do
-      let(:email) { "foo@bar.com" }
-      before { controller.remote_user_name = email }
-
-      describe "and auto-creation is enabled" do
-        before { allow(DeviseRemoteUser).to receive(:auto_create) { true } }
-        it "should create and sign in a new user" do
+    describe "when remote user is present" do
+      describe "and remote user exists in database" do
+        let(:user) { FactoryGirl.create(:user) }
+        before { controller.remote_user_name = user.email }
+        it "should login the remote user" do
           get :index
-          expect(response).to be_successful
           expect(controller.user_signed_in?).to be_true
-          expect(User.find_by_email(email)).to eq(controller.current_user)
+          expect(controller.current_user).to eq(user)
         end
       end
 
-      describe "and auto-creation is disabled" do
-        before { allow(DeviseRemoteUser).to receive(:auto_create) { false } }
-        it "should not create a user for the remote user" do
-          get :index
-          response.should_not be_successful
-          controller.user_signed_in?.should be_false
-          User.find_by_email(email).should be_nil
+      describe "and remote user does not exist in database" do
+        let(:email) { "foo@bar.com" }
+        before { controller.remote_user_name = email }
+
+        describe "and auto-creation is enabled" do
+          before { allow(DeviseRemoteUser).to receive(:auto_create) { true } }
+          it "should create and sign in a new user" do
+            get :index
+            expect(response).to be_successful
+            expect(controller.user_signed_in?).to be_true
+            expect(User.find_by_email(email)).to eq(controller.current_user)
+          end
+        end
+
+        describe "and auto-creation is disabled" do
+          before { allow(DeviseRemoteUser).to receive(:auto_create) { false } }
+          it "should not create a user for the remote user" do
+            get :index
+            response.should_not be_successful
+            controller.user_signed_in?.should be_false
+            User.find_by_email(email).should be_nil
+          end
         end
       end
     end
@@ -67,7 +87,7 @@ describe ApplicationController do
         sign_in local_user
       end
 
-      describe "and remote user exists" do
+      describe "and remote user exists in database" do
         let(:remote_user) { FactoryGirl.create(:user) }
         it "should not clobber the existing user session" do
           get :index
@@ -76,16 +96,15 @@ describe ApplicationController do
         end
       end
 
-      describe "and remote user does not exist" do
+      describe "and remote user does not exist in database" do
         let(:remote_user) { FactoryGirl.build(:user) }
         it "should not clobber the existing user session" do
           get :index
           expect(controller.current_user).to eq(local_user)
           expect(controller.current_user).not_to eq(remote_user)
-          expect(User.find_by_email(remote_user.email)).to be_nil
         end
       end
-    end
+    end # local database user signed in
 
     describe "auto-updating user attributes" do
       let(:user) { FactoryGirl.create(:user, first_name: 'Hardy', last_name: 'HarHar', nickname: "Laurel's Buddy", display_name: 'Hardy HarHar') }

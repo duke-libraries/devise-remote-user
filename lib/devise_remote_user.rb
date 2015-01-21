@@ -32,6 +32,9 @@ module DeviseRemoteUser
   mattr_accessor :logout_url
   @@logout_url = '/'
 
+  # Setting for redirecting to the remote user login URL
+  mattr_accessor :login_url
+
   def self.configure
     yield self
   end
@@ -48,6 +51,6 @@ module DeviseRemoteUser
 end
 
 Devise.add_module(:remote_user_authenticatable,
-                  :strategy => true,
-                  :controller => :sessions,
-                  :model => 'devise_remote_user/model')
+                  strategy: true,
+                  controller: :session,
+                  model: 'devise_remote_user/model')
