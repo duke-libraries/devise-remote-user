@@ -3,9 +3,10 @@ ENV['RAILS_ENV'] ||= 'test'
 require "coveralls"
 Coveralls.wear!("rails")
 
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
+require 'engine_cart'
+EngineCart.load_application!
+
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'factory_girl_rails'
 
 Rails.backtrace_cleaner.remove_silencers!
@@ -14,11 +15,35 @@ Rails.backtrace_cleaner.remove_silencers!
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
-  config.mock_with :rspec
-  config.use_transactional_fixtures = true
-  config.infer_base_class_for_anonymous_controllers = false
-  config.order = "random"
+  config.expect_with :rspec do |expectations|
+    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  end
 
-  config.include Devise::TestHelpers, :type => :controller
-  config.include Warden::Test::Helpers
+  config.mock_with :rspec do |mocks|
+    mocks.verify_partial_doubles = true
+  end
+
+  config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.filter_run_when_matching :focus
+
+  config.example_status_persistence_file_path = "spec/examples.txt"
+
+  config.disable_monkey_patching!
+
+  config.default_formatter = 'doc' if config.files_to_run.one?
+
+  config.order = :random
+
+  Kernel.srand config.seed
+
+  if defined? Devise::Test::ControllerHelpers
+    config.include Devise::Test::ControllerHelpers, type: :controller
+  else
+    config.include Devise::TestHelpers, type: :controller
+  end
+  if Rails::VERSION::MAJOR >= 5
+    config.include ::Rails.application.routes.url_helpers
+    config.include ::Rails.application.routes.mounted_helpers
+  end
 end

@@ -4,17 +4,14 @@ rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
 
-APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
-load 'rails/tasks/engine.rake'
-
 Bundler::GemHelper.install_tasks
 
-Dir[File.join(File.dirname(__FILE__), 'tasks/**/*.rake')].each {|f| load f }
+task default: :ci
 
-require 'rspec/core'
 require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
 
-desc "Run all specs in spec directory (excluding plugin specs)"
-RSpec::Core::RakeTask.new(:spec => ['app:db:migrate', 'app:db:test:prepare'])
+require 'engine_cart/rake_task'
+EngineCart.fingerprint_proc = EngineCart.rails_fingerprint_proc
 
-task :default => :spec
+task ci: ['engine_cart:generate', 'spec']

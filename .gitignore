@@ -21,3 +21,4 @@ tmp
 .yardoc
 _yardoc
 doc/
+.internal_test_app

@@ -1,8 +1,6 @@
 devise-remote-user
 ==================
 
-**END OF LIFE NOTICE: Version 0.4.1 is the final release of this gem.**
-
 A devise extension for remote user authentication.
 
 [![Gem Version](https://badge.fury.io/rb/devise-remote-user.svg)](http://badge.fury.io/rb/devise-remote-user)
@@ -53,4 +51,4 @@ end
 
 ## Tests
 
-`rake spec` runs the test suite.
+`rake ci` runs the test suite.
