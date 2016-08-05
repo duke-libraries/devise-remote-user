@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Devise::SessionsController do
+RSpec.describe Devise::SessionsController, type: :controller do
   before { @request.env["devise.mapping"] = Devise.mappings[:user] }
   describe "logout" do
     let(:user) { FactoryGirl.create(:user) }
@@ -12,9 +12,8 @@ describe Devise::SessionsController do
     end
     describe "when user is not remotely authenticated" do
       it "should redirect to the root path (Devise default)" do
-        expect(get :destroy).to redirect_to(root_path)
+        expect(get :destroy).to redirect_to('/')
       end
     end
   end
-
 end

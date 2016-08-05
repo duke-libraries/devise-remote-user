@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe DeviseRemoteUser do
+RSpec.describe DeviseRemoteUser do
   context ".remote_user_id" do
     let(:mock_env) { { 'REMOTE_USER' => 'some-id' } }
     context "with a string for the env_key" do
       before do
-        DeviseRemoteUser.env_key = "REMOTE_USER"
+        allow(DeviseRemoteUser).to receive(:env_key).and_return("REMOTE_USER")
       end
       
       it "should retrieve the key from the env" do
@@ -15,7 +15,7 @@ describe DeviseRemoteUser do
   
     context "with a proc for the env_key" do
       before do
-        DeviseRemoteUser.env_key = lambda { |env| "#{env['REMOTE_USER']}@example.com" }
+        allow(DeviseRemoteUser).to receive(:env_key).and_return lambda { |env| "#{env['REMOTE_USER']}@example.com" }
       end
       
       it "should retrieve the key from the env" do

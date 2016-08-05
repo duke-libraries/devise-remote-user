@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ApplicationController do
+RSpec.describe ApplicationController, type: :controller do
 
   controller do
     def remote_user_name=(user_name)
@@ -21,7 +21,7 @@ describe ApplicationController do
       before { controller.remote_user_name = user.email }
       it "should login the remote user" do
         get :index
-        expect(controller.user_signed_in?).to be_true
+        expect(controller.user_signed_in?).to eq true
         expect(controller.current_user).to eq(user)
       end
     end
@@ -30,7 +30,7 @@ describe ApplicationController do
       before { controller.remote_user_name = nil }
       it "should do nothing" do
         get :index
-        expect(controller.user_signed_in?).to be_false
+        expect(controller.user_signed_in?).to eq false
       end
     end
 
@@ -43,18 +43,18 @@ describe ApplicationController do
         it "should create and sign in a new user" do
           get :index
           expect(response).to be_successful
-          expect(controller.user_signed_in?).to be_true
+          expect(controller.user_signed_in?).to eq true
           expect(User.find_by_email(email)).to eq(controller.current_user)
         end
       end
 
       describe "and auto-creation is disabled" do
-        before { allow(DeviseRemoteUser).to receive(:auto_create) { false } }
+        before { allow(DeviseRemoteUser).to receive(:auto_create).and_return(false) }
         it "should not create a user for the remote user" do
           get :index
-          response.should_not be_successful
-          controller.user_signed_in?.should be_false
-          User.find_by_email(email).should be_nil
+          expect(response).to_not be_successful
+          expect(controller.user_signed_in?).to eq false
+          expect(User.find_by_email(email)).to be_nil
         end
       end
     end
@@ -62,7 +62,7 @@ describe ApplicationController do
     describe "when a local database user is already signed in" do
       let(:local_user) { FactoryGirl.create(:user) }
       before do
-        allow(DeviseRemoteUser).to receive(:auto_create) { true }
+        allow(DeviseRemoteUser).to receive(:auto_create).and_return(true)
         controller.remote_user_name = remote_user.email
         sign_in local_user
       end
@@ -100,7 +100,7 @@ describe ApplicationController do
 
       describe "when auto-creation is disabled" do
         before do
-          allow(DeviseRemoteUser).to receive(:auto_update) { false } 
+          allow(DeviseRemoteUser).to receive(:auto_update).and_return(false)
           controller.remote_user_name = user.email
           controller.remote_user_attributes = {
             'givenName' => 'Fleece',
@@ -121,7 +121,7 @@ describe ApplicationController do
 
       describe "when auto-creation is enabled" do
         before do
-          allow(DeviseRemoteUser).to receive(:auto_update) { true }
+          allow(DeviseRemoteUser).to receive(:auto_update).and_return(true)
           controller.remote_user_attributes = {
             'givenName' => 'Fleece',
             'sn' => 'Vest',
