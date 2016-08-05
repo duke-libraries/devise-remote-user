@@ -3,34 +3,32 @@ require 'devise_remote_user/engine'
 require 'devise_remote_user/controller_behavior'
 
 module DeviseRemoteUser
+  class << self
+    attr_accessor :env_key, :auto_create, :auto_update, :auth_key, :attribute_map, :logout_url
+  end
 
   # request.env key for remote user name
   # Set to 'HTTP_REMOTE_USER' in config/initializers/devise.rb if behind reverse proxy
-  mattr_accessor :env_key
-  @@env_key = 'REMOTE_USER'
-  
+  self.env_key = 'REMOTE_USER'
+
   # Enable user auto-creation of user from remote user attributes
-  mattr_accessor :auto_create
-  @@auto_create = false
+  self.auto_create = false
 
   # Enable user auto-update of user attributes from remote user attributes
-  mattr_accessor :auto_update
-  @@auto_update = false
+  self.auto_update = false
 
   # User attribute used for lookup of remote user
   # Defaults to Devise.authentication_keys.first
-  mattr_accessor :auth_key
-  @@auth_key = nil
+  self.auth_key = nil
 
   # Map of User model attributes to request.env keys for updating a local user when auto-creation is enabled.
-  mattr_accessor :attribute_map
-  @@attribute_map = {}
+  self.attribute_map = {}
 
   # Settings for redirecting to the remote user logout URL
   # Enable by including DeviseRemoteUser::Controllers::Helpers in ApplicationController
   # (it overrides Devise's after_sign_out_path_for method).
-  mattr_accessor :logout_url
-  @@logout_url = '/'
+  self.logout_url = '/'
+
 
   def self.configure
     yield self
