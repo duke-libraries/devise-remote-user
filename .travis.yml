@@ -1,2 +1,22 @@
+language: ruby
+sudo: false
+
+notifications:
+  email: false
+
 rvm:
-  - 2.1.1
+  - 2.3.1
+
+matrix:
+  include:
+    - rvm: 2.3.1
+      env: "RAILS_VERSION=4.2.7"
+
+before_install:
+  - gem install bundler
+
+env:
+ - "RAILS_VERSION=5.0.0"
+
+global_env:
+  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true

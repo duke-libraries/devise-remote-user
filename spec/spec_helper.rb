@@ -3,7 +3,9 @@ ENV['RAILS_ENV'] ||= 'test'
 require "coveralls"
 Coveralls.wear!("rails")
 
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
+require 'engine_cart'
+EngineCart.load_application!
+
 require 'rspec/rails'
 require 'factory_girl_rails'
 

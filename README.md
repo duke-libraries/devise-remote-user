@@ -53,4 +53,4 @@ end
 
 ## Tests
 
-`rake spec` runs the test suite.
+`rake ci` runs the test suite.
