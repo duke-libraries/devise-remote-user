@@ -27,6 +27,10 @@ module DeviseRemoteUser
     end
 
     def create_user
+      unless Devise.mappings[:user].strategies.include?(:database_authenticatable)
+        return klass.create(user_criterion)
+      end
+
       random_password = SecureRandom.hex(16)
       attrs = user_criterion.merge({password: random_password, password_confirmation: random_password})
       klass.create(attrs)
