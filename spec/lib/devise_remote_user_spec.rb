@@ -22,5 +22,29 @@ RSpec.describe DeviseRemoteUser do
         expect(DeviseRemoteUser.remote_user_id(mock_env)).to eq "some-id@example.com"
       end
     end
+
+    describe 'create_user' do
+      before do
+        allow(Devise.mappings[:user]).to receive(:strategies).and_return(stratagies)
+      end
+
+      let(:manager) { DeviseRemoteUser::Manager.new(User, 'REMOTE_USER' => 'some-id') }
+      context 'with a user that is database authenticatable' do
+        let(:stratagies) { [:database_authenticatable] }
+        it 'returns a user with a paswword' do
+          expect(User).to receive(:create).with(hash_including(:password))
+          manager.create_user
+        end
+      end
+
+      context 'with a user that is not database authenticatable' do
+        let(:stratagies) { [] }
+
+        it 'returns a user without a paswword' do
+          expect(User).to receive(:create).with(hash_excluding(:password))
+          manager.create_user
+        end
+      end
+    end
   end
 end

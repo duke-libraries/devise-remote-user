@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-rails", "~> 3.4"
   s.add_development_dependency "factory_girl_rails"
   s.add_development_dependency "capybara"
-  s.add_development_dependency "engine_cart"
+  s.add_development_dependency "engine_cart", "~> 2.0"
 end
