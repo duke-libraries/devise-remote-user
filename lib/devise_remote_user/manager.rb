@@ -37,7 +37,7 @@ module DeviseRemoteUser
     end
 
     def update_user(user)
-      user.update_attributes(remote_user_attributes)
+      user.update(remote_user_attributes)
     end
 
     protected
