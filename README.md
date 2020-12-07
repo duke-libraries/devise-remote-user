@@ -4,7 +4,7 @@ devise-remote-user
 A devise extension for remote user authentication.
 
 [![Gem Version](https://badge.fury.io/rb/devise-remote-user.svg)](http://badge.fury.io/rb/devise-remote-user)
-[![Build Status](https://travis-ci.org/duke-libraries/devise-remote-user.svg?branch=master)](https://travis-ci.org/duke-libraries/devise-remote-user)
+[![Build Status](https://github.com/duke-libraries/devise-remote-user/workflows/CI/badge.svg)](https://github.com/duke-libraries/devise-remote-user/actions?query=branch%3Amaster)
 [![Coverage Status](https://coveralls.io/repos/duke-libraries/devise-remote-user/badge.png?branch=master)](https://coveralls.io/r/duke-libraries/devise-remote-user?branch=master)
 [![Code Climate](https://codeclimate.com/github/duke-libraries/devise-remote-user/badges/gpa.svg)](https://codeclimate.com/github/duke-libraries/devise-remote-user)
 
